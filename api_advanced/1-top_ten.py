@@ -1,17 +1,20 @@
 #!/usr/bin/python3
-"""Module that prints the titles of the top 10 hot posts of a subreddit."""
+"""Module that prints the first 10 hot post titles of a subreddit."""
 
 import requests
 
 
 def top_ten(subreddit):
-    """Prints the first 10 hot post titles of a subreddit or None if invalid."""
+    """Prints the titles of the top 10 hot posts of a subreddit.
 
+    If subreddit is invalid, prints None.
+    """
     url = f"https://www.reddit.com/r/{subreddit}/hot.json"
     headers = {'User-Agent': 'Mozilla/5.0'}
+
+    # Prevent redirect to search for invalid subreddit
     response = requests.get(url, headers=headers, allow_redirects=False)
 
-    # Invalid subreddit
     if response.status_code != 200:
         print(None)
         return
