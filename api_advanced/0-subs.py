@@ -6,7 +6,7 @@ import requests
 def number_of_subscribers(subreddit):
     """Query Reddit API and return subscriber count"""
     url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {'User-Agent': 'alu-api-advanced/1.0'}
+   header = {'User-Agent': 'alu-api-advanced/1.0'}
 
     response = requests.get(
     reddit_url,
