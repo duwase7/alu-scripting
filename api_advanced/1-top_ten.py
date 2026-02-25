@@ -1,18 +1,21 @@
 #!/usr/bin/python3
-"""DOCS"""
+"""
+Return top 10 posts of a subreddit.
+"""
+
+import json
 import requests
 
 
 def top_ten(subreddit):
-    """Docs"""
-    reddit_url = "https://www.reddit.com/r/{}/hot.json" \
-        .format(subreddit)
-    headers = headers = {'User-agent': 'Mozilla/5.0'}
-    response = requests.get(reddit_url, headers=headers)
+    url = 'https://www.reddit.com/r/{}/hot.json?limit=10'.format(subreddit)
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        data = response.json()['data']
-        for post in data['children'][:10]:
-            print(post['data']['title'])
+        data = json.loads(response.text)
+        for post in data['data']['children']:
+            title = post['data']['title']
+            print(title)
     else:
         print(None)
