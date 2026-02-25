@@ -1,20 +1,17 @@
-#!/usr/bin/python3
-"""DOC"""
+
+"""Returns number of subscribers for a subreddit"""
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """DOC"""
-    reddit_url = "https://www.reddit.com/r/{}/about.json" \
-        .format(subreddit)
+    """Query Reddit API and return subscriber count"""
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    headers = {'User-Agent': 'alu-api-advanced/1.0'}
 
-    header = {'User-agent': 'Mozilla/5.0'}
-    response = requests.get(reddit_url,
-                            headers=header
-                            )
+    response = requests.get(url,
+                            headers=headers,
+                            allow_redirects=False)
 
     if response.status_code == 200:
-        data = response.json()['data']
-        subs = data['subscribers']
-        return subs
+        return response.json().get('data').get('subscribers')
     return 0
