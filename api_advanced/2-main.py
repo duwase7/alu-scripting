@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-2-main
-"""
+"""Main script to recursively count all hot post titles of a subreddit."""
 import sys
 
 if __name__ == '__main__':
