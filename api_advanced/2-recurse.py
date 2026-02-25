@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Recursive function to get all hot post titles"""
+"""Module that recursively retrieves all hot post titles from a subreddit."""
 import requests
 
 
