@@ -8,31 +8,27 @@ import json
 import requests
 
 
-def recurse(subreddit, hot_list=[], after=None):
-    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
-    headers = {'User-Agent': 'Mozilla/5.0'}
+def recurse(subreddit, hot_list=None, after=None):
+    """Recursively retrieves all hot post titles of a subreddit."""
+    if hot_list is None:
+        hot_list = []url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+headers = {'User-Agent': 'Mozilla/5.0'}
+params = {'after': after}
+response = requests.get(url, headers=headers, params=params, allow_redirects=False)
 
-    # After is set to none at first.
-    params = {'after': after} if after else {}
+if response.status_code != 200:
+    return None  # invalid subreddit
 
-    response = requests.get(url, headers=headers, params=params)
+data = response.json().get('data')
+after = data.get('after')
+children = data.get('children', [])
 
-    if response.status_code == 200:
-        data = response.json()
+# Add all titles to hot_list
+for child in children:
+    hot_list.append(child.get('data', {}).get('title'))
 
-        for post in data['data']['children']:
-            title = post['data']['title']
-            hot_list.append(title)
-
-        # set after to the last post of the previous result.
-        after = data['data']['after']
-
-        # call the function with the updated after i.e recursion
-        # to retrieve addition pages.
-        if after:
-            recurse(subreddit, hot_list, after)
-
-    else:
-        return None
-
+# Recursive call if more pages
+if after:
+    return recurse(subreddit, hot_list, after)
+return hot_list
     return hot_list
