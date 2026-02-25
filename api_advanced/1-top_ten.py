@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""DOCS"""
+"""Module that prints the titles of the top 10 hot posts of a subreddit."""
 import requests
 
 
