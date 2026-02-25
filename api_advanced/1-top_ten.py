@@ -1,21 +1,24 @@
 #!/usr/bin/python3
-"""
-Return top 10 posts of a subreddit.
-"""
+"""Module that prints the titles of the top 10 hot posts of a subreddit."""
 
-import json
 import requests
 
 
 def top_ten(subreddit):
-    url = 'https://www.reddit.com/r/{}/hot.json?limit=10'.format(subreddit)
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers)
+    """Prints the first 10 hot post titles of a subreddit or None if invalid."""
 
-    if response.status_code == 200:
-        data = json.loads(response.text)
-        for post in data['data']['children']:
-            title = post['data']['title']
-            print(title)
-    else:
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    response = requests.get(url, headers=headers, allow_redirects=False)
+
+    # Invalid subreddit
+    if response.status_code != 200:
         print(None)
+        return
+
+    data = response.json().get('data', {})
+    children = data.get('children', [])
+
+    # Print first 10 titles
+    for post in children[:10]:
+        print(post.get('data', {}).get('title'))
