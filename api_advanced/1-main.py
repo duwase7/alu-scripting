@@ -1,6 +1,6 @@
-
-"""Print top 10 hot posts"""
-import requests
+#!/usr/bin/python3
+"""Main script to print the top 10 hot posts of a subreddit."""
+import sys
 
 
 def top_ten(subreddit):
