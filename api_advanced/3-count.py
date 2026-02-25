@@ -1,26 +1,28 @@
 #!/usr/bin/python3
 """Count keywords in hot posts recursively"""
-import requests
 import re
+import requests
 
 
 def count_words(subreddit, word_list, after=None, counts=None):
-    """Print sorted keyword counts"""
+    """Print sorted count of given keywords"""
     if counts is None:
         counts = {}
-
         for word in word_list:
             word = word.lower()
             counts[word] = counts.get(word, 0)
 
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {'User-Agent': 'alu-api-advanced/1.0'}
-    params = {'after': after}
 
-    response = requests.get(url,
-                            headers=headers,
-                            params=params,
-                            allow_redirects=False)
+    response = requests.get(
+        url,
+        headers={'User-Agent': 'alu-api-advanced/1.0'},
+        params={
+            'after': after,
+            'limit': 100
+        },
+        allow_redirects=False
+    )
 
     if response.status_code != 200:
         return
