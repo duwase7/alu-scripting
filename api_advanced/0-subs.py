@@ -1,19 +1,20 @@
 #!/usr/bin/python3
-"""Module that queries the Reddit API to return the number of subscribers."""
+"""DOC"""
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """Query Reddit API and return subscriber count"""
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-   header = {'User-Agent': 'alu-api-advanced/1.0'}
+    """DOC"""
+    reddit_url = "https://www.reddit.com/r/{}/about.json" \
+        .format(subreddit)
 
-    response = requests.get(
-    reddit_url,
-    headers=header,
-    allow_redirects=False
-)
+    header = {'User-agent': 'Mozilla/5.0'}
+    response = requests.get(reddit_url,
+                            headers=header
+                            )
 
     if response.status_code == 200:
-        return response.json().get('data').get('subscribers')
+        data = response.json()['data']
+        subs = data['subscribers']
+        return subs
     return 0
