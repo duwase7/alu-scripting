@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Count keywords in hot posts recursively"""
+"""Module that recursively counts keywords in hot posts of a subreddit."""
 import re
 import requests
 
