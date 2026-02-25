@@ -4,18 +4,25 @@ import requests
 
 
 def recurse(subreddit, hot_list=None, after=None):
+    if hot_list is None:
+    hot_list = []
     """Return list of all hot post titles"""
     if hot_list is None:
         hot_list = []
 
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     headers = {'User-Agent': 'alu-api-advanced/1.0'}
-    params = {'after': after}
+    param = {
+    'after': after,
+    'limit': 100
+}
 
-    response = requests.get(url,
-                            headers=headers,
-                            params=params,
-                            allow_redirects=False)
+   response = requests.get(
+    url,
+    headers=header,
+    params=param,
+    allow_redirects=False
+)
 
     if response.status_code != 200:
         return None
