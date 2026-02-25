@@ -1,26 +1,38 @@
 #!/usr/bin/python3
-"""docs"""
+"""
+Append all the hot post's titles from a particular
+subreddit on a list calleg hot_list.
+"""
+
+import json
 import requests
 
 
 def recurse(subreddit, hot_list=[], after=None):
-    """"Doc"""
-    url = "https://www.reddit.com/r/{}/hot.json" \
-        .format(subreddit)
-    header = {'User-Agent': 'Mozilla/5.0'}
-    param = {'after': after}
-    resopnse = requests.get(url, headers=header, params=param)
+    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
+    headers = {'User-Agent': 'Mozilla/5.0'}
 
-    if resopnse.status_code != 200:
-        return None
+    # After is set to none at first.
+    params = {'after': after} if after else {}
+
+    response = requests.get(url, headers=headers, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        for post in data['data']['children']:
+            title = post['data']['title']
+            hot_list.append(title)
+
+        # set after to the last post of the previous result.
+        after = data['data']['after']
+
+        # call the function with the updated after i.e recursion
+        # to retrieve addition pages.
+        if after:
+            recurse(subreddit, hot_list, after)
+
     else:
-        json_res = resopnse.json()
-        after = json_res.get('data').get('after')
-        has_next = \
-            json_res.get('data').get('after') is not None
-        hot_articles = json_res.get('data').get('children')
-        [hot_list.append(article.get('data').get('title'))
-         for article in hot_articles]
+        return None
 
-        return recurse(subreddit, hot_list, after=after) \
-            if has_next else hot_list
+    return hot_list
