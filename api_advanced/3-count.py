@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 """Count keywords in hot posts recursively"""
 import requests
 import re
