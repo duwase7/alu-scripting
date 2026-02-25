@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 """Recursive function to get all hot post titles"""
 import requests
 
