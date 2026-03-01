@@ -1,6 +1,6 @@
 cat > api_advanced/3-count.py << 'EOF'
 #!/usr/bin/python3
-"""Module that recursively counts keywords in hot posts of a subreddit."""
+"""Counts keywords in hot post titles for a given subreddit."""
 
 import requests
 
