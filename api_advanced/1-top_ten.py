@@ -1,6 +1,6 @@
 cat > api_advanced/1-top_ten.py << 'EOF'
 #!/usr/bin/python3
-"""Module that prints the titles of the top 10 hot posts of a subreddit."""
+"""Prints the first 10 hot posts of a given subreddit."""
 
 import requests
 
