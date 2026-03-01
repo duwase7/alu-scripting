@@ -1,9 +1,6 @@
 cat > api_advanced/2-recurse.py << 'EOF'
 #!/usr/bin/python3
-"""
-Append all the hot post's titles from a particular
-subreddit on a list called hot_list.
-"""
+"""Returns list of all hot post titles for a given subreddit."""
 
 import requests
 
