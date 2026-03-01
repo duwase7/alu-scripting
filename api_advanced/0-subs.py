@@ -1,9 +1,6 @@
 cat > api_advanced/0-subs.py << 'EOF'
 #!/usr/bin/python3
-"""
-A script that use reddit api to outputs the
-number of subscribers of a certain subreddit.
-"""
+"""Returns number of subscribers for a given subreddit."""
 
 import requests
 
