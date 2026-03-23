@@ -14,7 +14,7 @@ def top_ten(subreddit):
     )
 
     if response.status_code != 200:
-        print(None)
+        print("None")  # <-- use string "None" instead of Python None
         return
 
     data = response.json()
