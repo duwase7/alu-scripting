@@ -1,24 +1,26 @@
-cat > api_advanced/1-top_ten.py << 'EOF'
 #!/usr/bin/python3
-"""Prints the first 10 hot posts of a given subreddit."""
-
+"""Prints the titles of the first 10 hot posts listed for a given subreddit."""
 import requests
 
 
 def top_ten(subreddit):
-    """Prints the first 10 hot post titles of a subreddit."""
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {'User-Agent': 'Mozilla/5.0'}
+    """Queries Reddit API and prints titles of first 10 hot posts."""
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    headers = {"User-Agent": "linux:my.reddit.app:v1.0.0 (by /u/elie)"}
+    params = {"limit": 10}
 
-    response = requests.get(url, headers=headers, allow_redirects=False)
+    response = requests.get(
+        url, headers=headers, params=params, allow_redirects=False
+    )
 
     if response.status_code != 200:
-        print("None")
+        print(None)
         return
 
-    data = response.json().get('data', {})
-    children = data.get('children', [])
+    data = response.json()
+    posts = data.get("data", {}).get("children", [])
 
-    for post in children[:10]:
-        print(post.get('data', {}).get('title'))
-EOF
+    for post in posts:
+        title = post.get("data", {}).get("title")
+        if title:
+            print(title)
