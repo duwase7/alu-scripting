@@ -1,19 +1,17 @@
-cat > api_advanced/0-subs.py << 'EOF'
 #!/usr/bin/python3
-"""Returns number of subscribers for a given subreddit."""
+"""Return the number of subscribers of a given subreddit"""
 
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """Returns the number of subscribers for a given subreddit."""
-    url = f'https://www.reddit.com/r/{subreddit}/about.json'
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers, allow_redirects=False)
+    """function that fetches number_of_subscribers"""
+    URL = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    HEADERS = {"User-Agent": "PostmanRuntime/7.35.0"}
 
-    if response.status_code == 200:
-        data = response.json()
-        return data['data']['subscribers']
-    else:
+    try:
+        RESPONSE = requests.get(URL, headers=HEADERS, allow_redirects=False)
+        return RESPONSE.json().get("data").get("subscribers")
+
+    except Exception:
         return 0
-EOF
