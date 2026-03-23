@@ -1,42 +1,36 @@
-cat > api_advanced/3-count.py << 'EOF'
 #!/usr/bin/python3
-"""Counts keywords in hot post titles for a given subreddit."""
+"""fetches the title of all hot posts for a given subreddit recursively"""
 
 import requests
 
 
-def count_words(subreddit, word_list, after=None, counts=None):
-    """Recursively counts occurrences of words in hot post titles."""
+def count_words(subreddit, word_list=[], hot_list=[], after=""):
+    """Main function"""
+    URL = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
 
-    if counts is None:
-        counts = {}
-        word_list = [w.lower() for w in word_list]
+    HEADERS = {"User-Agent": "PostmanRuntime/7.35.0"}
+    PARAMS = {"after": after, "limit": 100}
+    try:
+        RESPONSE = requests.get(URL, headers=HEADERS, params=PARAMS,
+                                allow_redirects=False)
+        after = RESPONSE.json().get("data").get("after")
+        HOT_POSTS = RESPONSE.json().get("data").get("children")
+        [hot_list.append(post.get('data').get('title')) for post in HOT_POSTS]
+        if after is not None:
+            return count_words(subreddit, word_list, hot_list, after)
 
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    params = {'after': after}
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
+        new_dict = {}
+        word_list = set([wrd.lower() for wrd in word_list])
+        for title in hot_list:
+            for word in title.split():
+                if word.lower() in new_dict:
+                    new_dict[word.lower()] += 1
+                else:
+                    new_dict.update({word.lower(): 1})
 
-    if response.status_code != 200:
-        return
-
-    data = response.json().get('data', {})
-    children = data.get('children', [])
-    after = data.get('after')
-
-    for child in children:
-        title = child.get('data', {}).get('title', '').lower().split()
-        for word in word_list:
-            if word in title:
-                counts[word] = counts.get(word, 0) + title.count(word)
-
-    if after:
-        return count_words(subreddit, word_list, after, counts)
-
-    if counts:
-        sorted_counts = sorted(counts.items(),
-                               key=lambda x: (-x[1], x[0]))
-        for word, count in sorted_counts:
-            print(f"{word}: {count}")
-EOF
+        sorted_dict = sorted(new_dict.items(), key=lambda x: (-x[1], x[0]))
+        for key, value in sorted_dict:
+            if (key in word_list) and (value > 0):
+                print("{}: {}".format(key, value))
+    except Exception:
+        return None
